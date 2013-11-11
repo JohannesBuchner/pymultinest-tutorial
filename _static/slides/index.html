@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>PyMultiNest tutorial</title>
+
+		<link rel="stylesheet" href="css/reveal.min.css" />
+		<link rel="stylesheet" href="css/theme/default.css" id="theme" />
+		<link rel="stylesheet" href="css/zenburn.css" />
+		
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		
+		<style type="text/css">
+		.reveal li { margin-top: 0.2em; }
+		.reveal p, .reveal h3, .reveal h2, .reveal h1 { margin-top: 0.75em; }
+		.reveal h1 { font-size: 3em; }
+		.reveal h1, .reveal h2, .reveal h3, .reveal h4 { 
+			hyphens: none; 
+			-moz-hyphens: none; 
+			-webkit-hyphens: none; word-wrap: none; }
+		.reveal table, .reveal td, .reveal th, .reveal tr {
+		padding: 0;
+		margin: 0;
+		}
+		.reveal td {
+		border-left: 1px dashed #CCC;
+		}
+		.reveal td, .reveal th {
+		padding: 0.2em 0.5em;
+		border-bottom: 1px dashed #CCC;
+		}
+		</style>
+		
+		<script type="text/javascript">
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+<section>
+	<h1>PyMultiNest tutorial</h1>
+	<h3>Casual parameter estimation and model selection</h3>
+	<br><br>
+	<p>Johannes Buchner
+	<br><br>
+	<p style="font-size: 0.75em">Max Planck Institute for Extraterrestrial Physics
+	<p style="font-size: 0.75em">November 2013
+</section>
+<section>
+	<h2>About me</h2>
+	<ul><li>implemented MCMC sampler for Bachelor thesis
+	<li>since then, 5 years of experience with Monte Carlo methods for Bayesian inference
+	<li>Numerical Likelihood functions, low-dimensional (&lt;20)
+	<li>Research on accreting supermassive black hole in X-ray (Poisson spectra)
+	<li>Recent interest: smooth field reconstruction with numerical likelihoods (20-500 dimensions)
+</section>
+
+<section>
+	<h2>What will we do today?</h2>
+	<ul>
+	<li>Write likelihood functions
+	<li>Write prior functions
+	<li>run nested sampling code
+	<li>look at marginal plots and compare evidence <script type="math/tex">Z</script>
+	</ul>
+</section>
+
+<section>
+	<h2>Software: PyMultiNest</h2>
+	<ul>
+	<li>based on MultiNest: written by Farhan Feroz and Mike Hobson
+	<li>Python instead of writing Fortran or C functions
+	<li>parses output, and does a bit of plotting
+	</ul>
+</section>
+
+
+<section>
+	<h2>Prior functions: A math trick</h2>
+	<p>Based on transforming unit cube:
+	<p>
+	<script type="math/tex">\int_a^b{f(x)g(x) dx} = \int_0^1{f(G^{-1}(u))~ du}</script>
+	<p>
+	<pause>
+	where <script type="math/tex">G</script> is the cumulative distribution of <script type="math/tex">g</script>:
+	<p><script type="math/tex">G(x) = \int_{-\infty}^{x}{g(x') dx'}, G(a) = 0, G(b) = 1</script>
+	
+	<div class="fragment"><ul><li>transformation through inverse of CDF
+	<li>compresses unimportant regions
+	<li>"native units" - can also do this in MCMC!
+	</ul>
+	
+	<pre><code data-trim class="python">
+def prior(cube, ndim, nparams):
+	cube[0] = cube[0] * 2
+	cube[1] = 10**(cube[1] * 10 - 5)
+</code></pre></div>
+</section>
+
+
+
+<section>
+	<h2>Shortest Code Example</h2>
+	<pre><code data-trim class="python">import pymultinest
+
+def prior(cube, ndim, nparams):
+	cube[0] = cube[0] * 2
+
+def loglikelihood(cube, ndim, nparams):
+	return -0.5 * ((cube[0] - 0.2) / 0.1)**2
+
+pymultinest.run(loglikelihood, prior, n_params=1)
+
+</code></pre>
+<ul><li>Prior ~ <script type="math/tex">U(0, 2)</script>
+<li>Likelihood ~ <script type="math/tex">N(\mu=0.2, \sigma=0.1)</script>
+<li>1d
+</section>
+
+<section>
+	<h2>Tutorial</h2>
+	<a href="http://johannesbuchner.github.io/pymultinest-tutorial/" target="_window">http://johannesbuchner.github.io/pymultinest-tutorial/</a>
+</section>
+
+<section>
+	<h2>References</h2>
+	
+</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+		<script src="js/jquery-2.0.3.min.js"></script>
+		<script src="js/squiggle.min.js"></script>
+		<script src="js/arrows.js"></script>
+
+		<script>
+			Reveal.initialize({
+				history: true,
+				transition: 'cube',
+				overview: true,
+				/*backgroundTransition: 'fade',*/
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					config: 'TeX-AMS-MML_HTMLorMML-full',
+				},
+
+				dependencies: [
+					{ src: 'lib/js/classList.js' },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/math/math.js', async: true },
+				]
+			});
+		</script>
+	</body>
+</html>
+
