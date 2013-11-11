@@ -17,7 +17,8 @@ Your task
 	.. literalinclude:: ../../example1/run.sh
 		:language: bash
 
-3. (optional) compare with the `minimal demo script of pymultinest <https://github.com/JohannesBuchner/PyMultiNest/blob/master/pymultinest_demo_minimal.py>`_.
+3. (optional) compare with the minimal demo script of pymultinest `pymultinest_demo_minimal.py <https://github.com/JohannesBuchner/PyMultiNest/blob/master/pymultinest_demo_minimal.py>`_. 
+	The not-so-minimal demo at `pymultinest_demo.py <https://github.com/JohannesBuchner/PyMultiNest/blob/master/pymultinest_demo.py>`_ shows how to do plotting yourself, and how to access the computed evidence.
 
 Continue with :doc:`example2` ...
 

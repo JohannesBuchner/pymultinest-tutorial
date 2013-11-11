@@ -10,15 +10,20 @@ It should kickstart you to
 * run pymultinest
 * visualize and interpret the results
 
-Go get started with :doc:`example1`!
+**Go get started with** :doc:`Example 1 <example1>`!
 
-Contents:
-
+Contents
+---------------
 .. toctree::
    example1
    example2
    example3
    :maxdepth: 2
+
+Links
+------------
+* `PyMultiNest documentation <http://johannesbuchner.github.io/pymultinest/index.html>`_
+* If you get bored, more links are at the end of :doc:`Example 3 <example3>`
 
 
 Indices and tables
