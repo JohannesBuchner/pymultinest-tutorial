@@ -19,5 +19,9 @@ Next
 
 * You may want to implement your own problem using pymultinest.
 * For inspiration, to the problem above, look at `SysCorr <http://johannesbuchner.github.io/syscorr/index.html>`_ and continue with its example.
+* `PyMultiNest documentation <http://johannesbuchner.github.io/pymultinest/index.html>`_
+* Also check out pycuba, a integration library.
+* `jbopt <http://johannesbuchner.github.io/jbopt/index.html>`_ is a cross-algorithm parameter space exploration toolkit. Check out the code example.
+
 
 
