@@ -1,0 +1,13 @@
+*.png
+*.eps
+*.pdf
+*.txt
+*.dat
+*.iterinfo
+*.ptprob
+*.points
+*~
+*.pyc
+out/
+_build/
+build
