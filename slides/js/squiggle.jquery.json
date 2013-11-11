@@ -1,0 +1,31 @@
+{
+    "name": "squiggle",
+    "title": "Squiggle - like a strike-through, scribble out your text content with a Squiggle",
+    "description": "Use this jQuery plugin to generate a canvas 'scribble' over your text; whilst preserving its context so you can still copy it to clipboard and all the other usual accessibility options, like zoom and allowing for @media queries.",
+    "keywords": [
+        "canvas",
+        "text",
+        "effect",
+        "jquery",
+        "spline",
+        "glitch",
+        "font"
+    ],
+    "version": "0.4.0",
+    "author": {
+        "name": "vonKristoff",
+        "url": "http://bite-software.co.uk"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    ],
+    "homepage": "http://bite-software.co.uk/squiggle",
+    "docs": "https://github.com/vonKristoff/squiggle",
+    "download": "https://github.com/vonKristoff/squiggle/archive/master.zip",
+    "dependencies": {
+        "jquery": ">=1.7.1"
+    }
+}
