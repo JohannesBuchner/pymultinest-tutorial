@@ -2,7 +2,7 @@ Welcome to the pymultinest tutorial!
 ================================================
 
 This tutorial was developed for the `Monte Carlo Methods in Advanced Statistics Applications and Data Analysis school <https://indico.desy.de/conferenceDisplay.py?confId=7699>`_ 
-(18-22 November 2013, MPI Munich).
+(18-22 November 2013, MPI Munich). There are accompaning `slides <_static/slides/index.html>`_.
 
 It should kickstart you to
 
