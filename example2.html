@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example 2: Gaussian Emission lines &mdash; pymultinest-tutorial 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="pymultinest-tutorial 1.0 documentation" href="index.html" />
+    <link rel="next" title="Example 3: Gaussian Emission lines - correlations" href="example3.html" />
+    <link rel="prev" title="Example 1: One-dimensional multi-modal problem" href="example1.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example3.html" title="Example 3: Gaussian Emission lines - correlations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example1.html" title="Example 1: One-dimensional multi-modal problem"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pymultinest-tutorial 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-2-gaussian-emission-lines">
+<h1>Example 2: Gaussian Emission lines<a class="headerlink" href="#example-2-gaussian-emission-lines" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Generating data</dt>
+<dd><p class="first last">In the folder example2, find and run lines_generate.py.
+It will generate data for you.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">View the data</p>
+<blockquote>
+<div><p>Take a look at one of the generated data sets: &#8220;out/spectrum01&#8221;.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Analysing a data set</p>
+<blockquote>
+<div><p>In the folder example2, I started the script lines.py,
+which allows you to analyse data with the model of a single gaussian line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span><span class="o">,</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">pymultinest</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="n">ydata</span> <span class="o">=</span> <span class="bp">None</span> <span class="c"># loaded below</span>
+
+<span class="n">noise</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c"># model for 2 gaussians, same width, fixed offset</span>
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height1</span><span class="p">,</span> <span class="n">height2</span><span class="p">):</span>
+	<span class="n">pos2</span> <span class="o">=</span> <span class="n">pos1</span> <span class="o">+</span> <span class="mf">0.05</span>
+	<span class="k">return</span>  <span class="n">height1</span> <span class="o">*</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="o">+</span> \
+		<span class="n">height2</span> <span class="o">*</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pos2</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+
+<span class="c"># a more elaborate prior</span>
+<span class="c"># parameters are pos1, width, height1, [height2]</span>
+<span class="k">def</span> <span class="nf">prior</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">ndim</span><span class="p">,</span> <span class="n">nparams</span><span class="p">):</span>
+	<span class="c">#cube[0] = cube[0]            # uniform prior between 0:1</span>
+	<span class="n">cube</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">cube</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="c"># log-uniform prior between 10^-4 and 10^4</span>
+	<span class="n">cube</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">cube</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="c"># log-uniform prior between 10^-4 and 1</span>
+	<span class="k">if</span> <span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+		<span class="k">return</span>
+	<span class="n">cube</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">cube</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="c"># log-uniform prior between 10^-4 and 1</span>
+
+
+<span class="k">def</span> <span class="nf">loglike</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">ndim</span><span class="p">,</span> <span class="n">nparams</span><span class="p">):</span>
+	<span class="n">pos1</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height1</span> <span class="o">=</span> <span class="n">cube</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cube</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cube</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+	<span class="n">height2</span> <span class="o">=</span> <span class="n">cube</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">0</span>
+	<span class="n">ymodel</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height1</span><span class="p">,</span> <span class="n">height2</span><span class="p">)</span>
+	<span class="n">loglikelihood</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">ymodel</span> <span class="o">-</span> <span class="n">ydata</span><span class="p">)</span> <span class="o">/</span> <span class="n">noise</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">loglikelihood</span>
+
+<span class="c"># analyse the file given as first argument</span>
+<span class="n">datafile</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ydata</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
+
+<span class="c"># analyse with 1 gaussian</span>
+
+<span class="c"># number of dimensions our problem has</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;pos1&quot;</span><span class="p">,</span> <span class="s">&quot;width&quot;</span><span class="p">,</span> <span class="s">&quot;height1&quot;</span><span class="p">]</span>
+<span class="n">n_params</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+
+<span class="c"># run MultiNest</span>
+<span class="n">pymultinest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">loglike</span><span class="p">,</span> <span class="n">prior</span><span class="p">,</span> <span class="n">n_params</span><span class="p">,</span> <span class="n">outputfiles_basename</span><span class="o">=</span><span class="n">datafile</span> <span class="o">+</span> <span class="s">&#39;_1_&#39;</span><span class="p">,</span> <span class="n">resume</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">datafile</span> <span class="o">+</span> <span class="s">&#39;_1_params.json&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">))</span> <span class="c"># save parameter names</span>
+
+<span class="c"># plot the distribution of a posteriori possible models</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="s">&#39;+ &#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">pymultinest</span><span class="o">.</span><span class="n">Analyzer</span><span class="p">(</span><span class="n">outputfiles_basename</span><span class="o">=</span><span class="n">datafile</span> <span class="o">+</span> <span class="s">&#39;_1_&#39;</span><span class="p">,</span> <span class="n">n_params</span> <span class="o">=</span> <span class="n">n_params</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">get_equal_weighted_posterior</span><span class="p">()[::</span><span class="mi">100</span><span class="p">,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;data&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">datafile</span> <span class="o">+</span> <span class="s">&#39;_1_posterior.pdf&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">a_lnZ</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()[</span><span class="s">&#39;global evidence&#39;</span><span class="p">]</span>
+<span class="k">print</span> 
+<span class="k">print</span> <span class="s">&#39;  log p(model = 1 line ) = </span><span class="si">%.1f%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a_lnZ</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+
+<span class="c"># TODO: implement a model with 2 lines?</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<div class="section" id="your-task">
+<h2>Your task<a class="headerlink" href="#your-task" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Apply the script to the dataset &#8216;spectrum01&#8217;</li>
+<li>As in <a class="reference internal" href="example1.html"><em>Example 1: One-dimensional multi-modal problem</em></a>, plot and look at the marginal parameter distributions.</li>
+<li>What is the evidence for this model?</li>
+<li><strong>Extend the model to 2 gaussian lines.</strong></li>
+<li>Are 2 gaussian lines preferred? I.e. is the evidence higher?</li>
+<li>Analyse the other datasets. Are the results the same?</li>
+</ol>
+<p>Continue with <a class="reference internal" href="example3.html"><em>Example 3: Gaussian Emission lines - correlations</em></a> ...</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example 2: Gaussian Emission lines</a><ul>
+<li><a class="reference internal" href="#your-task">Your task</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="example1.html"
+                        title="previous chapter">Example 1: One-dimensional multi-modal problem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example3.html"
+                        title="next chapter">Example 3: Gaussian Emission lines - correlations</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/example2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example3.html" title="Example 3: Gaussian Emission lines - correlations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example1.html" title="Example 1: One-dimensional multi-modal problem"
+             >previous</a> |</li>
+        <li><a href="index.html">pymultinest-tutorial 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Johannes Buchner.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

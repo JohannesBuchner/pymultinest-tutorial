@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example 1: One-dimensional multi-modal problem &mdash; pymultinest-tutorial 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="pymultinest-tutorial 1.0 documentation" href="index.html" />
+    <link rel="next" title="Example 2: Gaussian Emission lines" href="example2.html" />
+    <link rel="prev" title="Welcome to the pymultinest tutorial!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example2.html" title="Example 2: Gaussian Emission lines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to the pymultinest tutorial!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pymultinest-tutorial 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-1-one-dimensional-multi-modal-problem">
+<h1>Example 1: One-dimensional multi-modal problem<a class="headerlink" href="#example-1-one-dimensional-multi-modal-problem" title="Permalink to this headline">¶</a></h1>
+<p>In the folder example1, find the file 1d_multimodal.py. It illustrates how to call pymultinest with</p>
+<ul class="simple">
+<li>one dimension only</li>
+<li>a uniform prior</li>
+<li>some made-up likelihood function</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span><span class="o">,</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">pymultinest</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c"># we define the problem: we need a prior function which maps from [0:1] to the parameter space</span>
+
+<span class="c"># we only have one parameter, the position of the gaussian (ndim == 1)</span>
+<span class="c"># map it from the unity interval 0:1 to our problem space 0:2 under a uniform prior</span>
+<span class="k">def</span> <span class="nf">prior</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">ndim</span><span class="p">,</span> <span class="n">nparams</span><span class="p">):</span>
+	<span class="n">cube</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cube</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="c"># our likelihood function consists of 6 gaussians modes (solutions) at the positions</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="k">def</span> <span class="nf">loglike</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">ndim</span><span class="p">,</span> <span class="n">nparams</span><span class="p">):</span>
+	<span class="c"># get the current parameter (is between 0:2 now)</span>
+	<span class="n">pos</span> <span class="o">=</span> <span class="n">cube</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">likelihood</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">pos</span> <span class="o">-</span> <span class="n">positions</span><span class="p">)</span> <span class="o">/</span> <span class="n">width</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">width</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+	<span class="k">return</span> <span class="n">log</span><span class="p">(</span><span class="n">likelihood</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+<span class="c"># number of dimensions our problem has</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;position&quot;</span><span class="p">]</span>
+<span class="n">n_params</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+
+<span class="c"># run MultiNest</span>
+<span class="n">pymultinest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">loglike</span><span class="p">,</span> <span class="n">prior</span><span class="p">,</span> <span class="n">n_params</span><span class="p">,</span> <span class="n">outputfiles_basename</span><span class="o">=</span><span class="s">&#39;out/&#39;</span><span class="p">,</span>
+	<span class="n">resume</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;out/params.json&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">))</span> <span class="c"># save parameter names</span>
+
+<span class="c"># now run the script and analyse the output using multinest_marginals.py::</span>
+<span class="c"># </span>
+<span class="c">#    $ python 1_1d_multimodal.py &amp;&amp;  multinest_marginals.py 1_1d_multimodal_out</span>
+<span class="c">#</span>
+<span class="c"># then open the file 1_1d_multimodal_outmarg.pdf</span>
+<span class="c">#</span>
+<span class="c"># Btw, ln(ev) should be ln(6 / 2)</span>
+</pre></div>
+</div>
+<div class="section" id="your-task">
+<h2>Your task<a class="headerlink" href="#your-task" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Study the example to understand how to call pymultinest.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Run it, and analyse the output with multinest_marginals.py</dt>
+<dd><div class="first last highlight-bash"><div class="highlight"><pre><span class="c"># run the script</span>
+python 1d_multimodal.py
+<span class="c"># analyse the output, which is in out/.</span>
+<span class="c"># multinest_marginals.py is a plotting tool that comes with pymultinest.</span>
+multinest_marginals.py out/
+<span class="c"># open the marginal plots at marg.pdf</span>
+xdg-open out/marg.pdf
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first">(optional) compare with the <a class="reference external" href="https://github.com/JohannesBuchner/PyMultiNest/blob/master/pymultinest_demo_minimal.py">minimal demo script of pymultinest</a>.</p>
+</li>
+</ol>
+<p>Continue with <a class="reference internal" href="example2.html"><em>Example 2: Gaussian Emission lines</em></a> ...</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example 1: One-dimensional multi-modal problem</a><ul>
+<li><a class="reference internal" href="#your-task">Your task</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to the pymultinest tutorial!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example2.html"
+                        title="next chapter">Example 2: Gaussian Emission lines</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/example1.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example2.html" title="Example 2: Gaussian Emission lines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to the pymultinest tutorial!"
+             >previous</a> |</li>
+        <li><a href="index.html">pymultinest-tutorial 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Johannes Buchner.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
