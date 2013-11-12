@@ -22,7 +22,7 @@ Contents
 
 Links
 ------------
-* `PyMultiNest documentation <http://johannesbuchner.github.io/pymultinest/index.html>`_
+* `PyMultiNest documentation <http://johannesbuchner.github.io/PyMultiNest/>`_ and installation.
 * If you get bored, more links are at the end of :doc:`Example 3 <example3>`
 
 
