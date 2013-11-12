@@ -36,16 +36,16 @@ The complete installation instructions are `here <http://johannesbuchner.github.
 		
 		$ git clone https://github.com/JohannesBuchner/MultiNest.git
 	
-	3. build MultiNest
+	3. build MultiNest::
 		
 		$ cd MultiNest/build/
 		$ cmake .. && make
 	
-	4. set the LD_LIBRARY_PATH environment variable to include libmultinest.so
+	4. set the LD_LIBRARY_PATH environment variable to include libmultinest.so::
 	
 		$ export LD_LIBRARY_PATH=/my/directory/MultiNest/lib/:$LD_LIBRARY_PATH
 	
-	To not having to do this every time, put it into ~/.bashrc as well
+	To not having to do the last step for every new shell, put it into ~/.bashrc as well
 
 2. PyMultiNest
 	1. make sure you have scipy and matplotlib installed::
@@ -64,6 +64,7 @@ The complete installation instructions are `here <http://johannesbuchner.github.
 	
 		export PATH=$PATH:$HOME/.local/bin/
 
+	To not having to do the last step for every new shell, put it into ~/.bashrc as well
 
 On a Mac/Apple computer
 -------------------------

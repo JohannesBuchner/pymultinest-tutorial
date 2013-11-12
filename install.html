@@ -84,25 +84,23 @@ $ multinest_marginals.py chains/1-</pre>
 <div><p>$ git clone <a class="reference external" href="https://github.com/JohannesBuchner/MultiNest.git">https://github.com/JohannesBuchner/MultiNest.git</a></p>
 </div></blockquote>
 </li>
-<li><p class="first">build MultiNest</p>
-<blockquote>
-<div><p>$ cd MultiNest/build/
-$ cmake .. &amp;&amp; make</p>
-</div></blockquote>
+<li><p class="first">build MultiNest:</p>
+<div class="highlight-python"><pre>$ cd MultiNest/build/
+$ cmake .. &amp;&amp; make</pre>
+</div>
 </li>
-<li><p class="first">set the LD_LIBRARY_PATH environment variable to include libmultinest.so</p>
-<blockquote>
-<div><p>$ export LD_LIBRARY_PATH=/my/directory/MultiNest/lib/:$LD_LIBRARY_PATH</p>
-</div></blockquote>
+<li><p class="first">set the LD_LIBRARY_PATH environment variable to include libmultinest.so:</p>
+<div class="highlight-python"><pre>$ export LD_LIBRARY_PATH=/my/directory/MultiNest/lib/:$LD_LIBRARY_PATH</pre>
+</div>
 </li>
 </ol>
-<p class="last">To not having to do this every time, put it into ~/.bashrc as well</p>
+<p class="last">To not having to do the last step for every new shell, put it into ~/.bashrc as well</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>PyMultiNest</dt>
-<dd><ol class="first last arabic">
+<dd><ol class="first arabic">
 <li><p class="first">make sure you have scipy and matplotlib installed:</p>
 <div class="highlight-python"><pre>$ yum install python-matplotlib scipy numpy</pre>
 </div>
@@ -120,6 +118,7 @@ $ cmake .. &amp;&amp; make</p>
 </div>
 </li>
 </ol>
+<p class="last">To not having to do the last step for every new shell, put it into ~/.bashrc as well</p>
 </dd>
 </dl>
 </li>
