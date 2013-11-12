@@ -32,7 +32,7 @@ The complete installation instructions are `here <http://johannesbuchner.github.
 	
 		$ yum install cmake lapack-devel lapack blas blas-devel
 
-	2. download MultiNest
+	2. download MultiNest::
 		
 		$ git clone https://github.com/JohannesBuchner/MultiNest.git
 	
