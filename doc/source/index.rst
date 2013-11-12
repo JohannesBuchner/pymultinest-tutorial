@@ -10,7 +10,7 @@ It should kickstart you to
 * run pymultinest
 * visualize and interpret the results
 
-**Go get started with** :doc:`Example 1 <example1>`!
+Make sure you have :doc:`pymultinest installed <install>`. Then, **go get started with** :doc:`Example 1 <example1>`!
 
 Contents
 ---------------
@@ -22,7 +22,8 @@ Contents
 
 Links
 ------------
-* `PyMultiNest documentation <http://johannesbuchner.github.io/PyMultiNest/>`_ and installation.
+* `PyMultiNest documentation <http://johannesbuchner.github.io/PyMultiNest/>`_.
+* :doc:`install`
 * If you get bored, more links are at the end of :doc:`Example 3 <example3>`
 
 
