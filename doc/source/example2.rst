@@ -25,7 +25,8 @@ Your task
 3. What is the evidence for this model?
 4. **Extend the model to 2 gaussian lines.**
 5. Are 2 gaussian lines preferred? I.e. is the evidence higher?
-6. Analyse the other datasets. Are the results the same?
+6. Are 3 gaussian lines preferred?
+7. Analyse the other datasets. Are the results the same?
 
 Continue with :doc:`example3` ...
 

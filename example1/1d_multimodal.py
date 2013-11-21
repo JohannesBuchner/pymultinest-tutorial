@@ -20,7 +20,7 @@ def loglike(cube, ndim, nparams):
 	# get the current parameter (is between 0:2 now)
 	pos = cube[0]
 	likelihood = exp(-0.5 * ((pos - positions) / width)**2) / (2*pi*width**2)**0.5
-	return log(likelihood.sum())
+	return log(likelihood.mean())
 
 # number of dimensions our problem has
 parameters = ["position"]
@@ -37,5 +37,6 @@ json.dump(parameters, open('out/params.json', 'w')) # save parameter names
 #
 # then open the file 1_1d_multimodal_outmarg.pdf
 #
-# Btw, ln(ev) should be ln(6 / 2)
+# Btw, ln(ev) should be ln(1 / 2)
+
 

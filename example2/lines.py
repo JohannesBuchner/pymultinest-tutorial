@@ -61,7 +61,11 @@ plt.close()
 
 a_lnZ = a.get_stats()['global evidence']
 print 
-print '  log p(model = 1 line ) = %.1f%s' % (a_lnZ / log(10),
+print '************************'
+print 'MAIN RESULT: Evidence Z '
+print '************************'
+print '  log Z for model with 1 line = %.1f' % (a_lnZ / log(10))
+print
 
 # TODO: implement a model with 2 lines?
 

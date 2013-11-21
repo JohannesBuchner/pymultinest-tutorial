@@ -6,21 +6,18 @@ On the school computers
 
 1. Log in, and run the bash shell::
 
-	[school08@naf-school01]~% bash
-	school08@naf-school01 ~ $ 
+	$ ssh -Y schoolNN@naf-school01.desy.de
+	[schoolNN@naf-school01]~% bash
+	bash-4.1$ 
 
 2. Load the environment::
 	
-	$ . /afs/desy.de/group/school/mc-school/setup_pymultinest.sh
+	bash-4.1$ source /afs/desy.de/group/school/mc-school/setup_pymultinest.sh
+	installing pymultinest ... installation successful
+	configuring environment and testing ... ok
+	schoolNN@naf-school01 ~ $
 
-3. Test it::
-
-	$ mkdir test
-	$ cd test
-	$ python /afs/desy.de/group/school/mc-school/multinest-install/PyMultiNest/pymultinest_demo_minimal.py
-	$ multinest_marginals.py chains/1-
-
-
+Go start with Example 1. Do not waste time installing on your own computer before having finished Example 1.
 
 On your own computer
 ----------------------------
