@@ -12,6 +12,7 @@ pushd download
 echo ">> downloading MultiNest..."
 git clone https://github.com/JohannesBuchner/MultiNest
 pushd MultiNest
+DIR=$PWD/lib/
 cd build
 echo ">> building MultiNest..."
 cmake .. > /dev/null && make > /dev/null
