@@ -54,6 +54,9 @@
             
   <div class="section" id="example-1-one-dimensional-multi-modal-problem">
 <h1>Example 1: One-dimensional multi-modal problem<a class="headerlink" href="#example-1-one-dimensional-multi-modal-problem" title="Permalink to this headline">¶</a></h1>
+<p>Get a copy of the <a class="reference external" href="https://github.com/JohannesBuchner/pymultinest-tutorial">tutorial example code</a>:</p>
+<div class="highlight-python"><pre>$ git clone https://github.com/JohannesBuchner/pymultinest-tutorial</pre>
+</div>
 <p>In the folder example1, find the file 1d_multimodal.py. It illustrates how to call pymultinest with</p>
 <ul class="simple">
 <li>one dimension only</li>
@@ -82,7 +85,7 @@
 	<span class="c"># get the current parameter (is between 0:2 now)</span>
 	<span class="n">pos</span> <span class="o">=</span> <span class="n">cube</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 	<span class="n">likelihood</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">pos</span> <span class="o">-</span> <span class="n">positions</span><span class="p">)</span> <span class="o">/</span> <span class="n">width</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">width</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
-	<span class="k">return</span> <span class="n">log</span><span class="p">(</span><span class="n">likelihood</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+	<span class="k">return</span> <span class="n">log</span><span class="p">(</span><span class="n">likelihood</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 
 <span class="c"># number of dimensions our problem has</span>
 <span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;position&quot;</span><span class="p">]</span>
@@ -99,7 +102,7 @@
 <span class="c">#</span>
 <span class="c"># then open the file 1_1d_multimodal_outmarg.pdf</span>
 <span class="c">#</span>
-<span class="c"># Btw, ln(ev) should be ln(6 / 2)</span>
+<span class="c"># Btw, ln(ev) should be ln(1 / 2)</span>
 </pre></div>
 </div>
 <div class="section" id="your-task">

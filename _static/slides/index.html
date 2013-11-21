@@ -32,6 +32,21 @@
 		padding: 0.2em 0.5em;
 		border-bottom: 1px dashed #CCC;
 		}
+	
+.checkboxlist li {
+	list-style: none;
+}
+.checkboxlist li:before
+{
+    content: "\2610";
+    margin-right:5px;
+}
+
+.checkboxlist li:hover:before
+{
+    content: "\2611";
+    margin-right:5px;
+}
 		</style>
 		
 		<script type="text/javascript">
@@ -51,17 +66,62 @@
 	<p style="font-size: 0.75em">Max Planck Institute for Extraterrestrial Physics
 	<p style="font-size: 0.75em">November 2013
 </section>
+
 <section>
 	<h2>About me</h2>
 	<ul><li>implemented MCMC sampler for Bachelor thesis
 	<li>since then, 5 years of experience with Monte Carlo methods for Bayesian inference
-	<li>Numerical Likelihood functions, low-dimensional (&lt;20)
+	<li>Numerical Likelihood functions (0.1-5s), low-dimensional (&lt;20)
 	<li>Research on accreting supermassive black hole in X-ray (Poisson spectra)
 	<li>Recent interest: smooth field reconstruction with numerical likelihoods (20-500 dimensions)
+	</ul>
+	<p style="font-size: 0.5em"><a href="https://www.mpe.mpg.de/~jbuchner/">https://www.mpe.mpg.de/~jbuchner/</a> -- Johannes Buchner
+</section>
+
+<section>
+	<h2>Go-to Methods</h2>
+	<div style="text-align: left">
+	(for numerical likelihoods)
+	<h3>Parameter estimation</h3>
+	<ul>
+	<li>Optimize to maximum (ML/MAP)
+	<li>explore around it with MCMC
+	<li>High-dimensional, misbehaved: MCMC (?), HMC (?)
+	<li>
+	</ul>
+	<h3>Model selection</h3>
+	<ul>
+	<li>High-dimensional: 
+	<li>Low-dimensional: 
+	<li>Nested models: 
+	</ul>
+	</div>
+</section>
+
+<section>
+	<h2>Tools so far</h2>
+	<div style="text-align: left">
+	(for numerical likelihoods)
+	<h3>Parameter estimation</h3>
+	<ul>
+	<li>Optimize to maximum (ML/MAP)
+	<li>explore around it with MCMC
+	<li>High-dimensional, misbehaved: MCMC (?), HMC (?)
+	<li>Low-dimensional, multi-modal: MultiNest
+	</ul>
+	<h3>Model selection</h3>
+	<ul>
+	<li>High-dimensional: give up
+	<li>Low-dimensional (&lt;20), multi-modal: MultiNest
+	<li>Nested models: AIC + DE
+	</ul>
+	also for Low-dimensional, multi-modal: MultiNest
+	</div>
 </section>
 
 <section>
 	<h2>What will we do today?</h2>
+	Goal: solving <script type="math/tex">Z</script> integrals
 	<ul>
 	<li>Write likelihood functions
 	<li>Write prior functions
@@ -73,9 +133,11 @@
 <section>
 	<h2>Software: PyMultiNest</h2>
 	<ul>
-	<li>based on MultiNest: written by Farhan Feroz and Mike Hobson
+	<li>based on MultiNest: written by Farhan Feroz and Mike Hobson (2007)
+	<li>Finds clusters -> sampling from ellipses
 	<li>Python instead of writing Fortran or C functions
 	<li>parses output, and does a bit of plotting
+	<li>Also produces "Markov Chain" for uncertainty propagation
 	</ul>
 </section>
 
@@ -92,14 +154,23 @@
 	
 	<div class="fragment"><ul><li>transformation through inverse of CDF
 	<li>compresses unimportant regions
-	<li>"native units" - can also do this in MCMC!
+	<li>"native units": <script type="math/tex">P(\theta|D)\propto \int_0^1{P(D|u) du} </script>
+	<li>can also do this in MCMC!
+	</ul></div>
+</section>
+<section>
+	<h2>Prior functions: A math trick</h2>
+	<ul>
+	<li>Transform from unit cube to parameter space
+	<li>Using inverse CDF of prior
 	</ul>
-	
+	<img src="prior_transform_uniform.png" style="background-color: white;" />
+	<img src="prior_transform_loguniform.png" style="background-color: white;"/>
 	<pre><code data-trim class="python">
 def prior(cube, ndim, nparams):
-	cube[0] = cube[0] * 2
-	cube[1] = 10**(cube[1] * 10 - 5)
-</code></pre></div>
+	cube[0] = cube[0] * (3 - 1) + 1
+	cube[1] = 10**(cube[1] * (1 + 0.5) - 1)
+</code></pre>
 </section>
 
 
@@ -125,11 +196,25 @@ pymultinest.run(loglikelihood, prior, n_params=1)
 <section>
 	<h2>Tutorial</h2>
 	<a href="http://johannesbuchner.github.io/pymultinest-tutorial/" target="_window">http://johannesbuchner.github.io/pymultinest-tutorial/</a>
+	<pre><code data-trim class="bash">$ ssh -Y schoolNN@naf-school01.desy.de
+$ bash
+$ source /afs/desy.de/group/school/mc-school/setup_pymultinest.sh
+$ git clone https://github.com/JohannesBuchner/pymultinest-tutorial</code></pre>
+	<ul class="checkboxlist">
+	<li>Example 1: <i>1d multi-modal problem</i>
+	<li>Example 2: <i>Spectral line analysis</i> -- 1 line or 2 lines?
+	<li>Example 3: Hierarchical Bayes, Your own, Lighthouse problem, further reading
+	</ul>
 </section>
 
 <section>
-	<h2>References</h2>
-	
+	<h2>Final points</h2>
+	<ul>
+	<li>Correlation of parameters from posterior samples <a href="http://johannesbuchner.github.io/syscorr/index.html">SysCorr</a>
+	<li>Throw multiple algorithms against problem (<a href="http://johannesbuchner.github.io/jbopt/index.html">jbopt</a>)
+	<li>Fully automated model selection, but is model a good one? Systematic errors? Confidence on model choice?
+	<li>PyMultiNest reference: Buchner et al (in prep), MultiNest: arXiv:0704.3704, arXiv:0809.3437 & arXiv:1306.2144
+	</ul>
 </section>
 
 			</div>

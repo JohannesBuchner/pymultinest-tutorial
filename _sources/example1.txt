@@ -1,6 +1,10 @@
 Example 1: One-dimensional multi-modal problem
 ===============================================
 
+Get a copy of the `tutorial example code <https://github.com/JohannesBuchner/pymultinest-tutorial>`_::
+
+   $ git clone https://github.com/JohannesBuchner/pymultinest-tutorial
+
 In the folder example1, find the file 1d_multimodal.py. It illustrates how to call pymultinest with
 
 * one dimension only

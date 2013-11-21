@@ -134,7 +134,11 @@ which allows you to analyse data with the model of a single gaussian line:</p>
 
 <span class="n">a_lnZ</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()[</span><span class="s">&#39;global evidence&#39;</span><span class="p">]</span>
 <span class="k">print</span> 
-<span class="k">print</span> <span class="s">&#39;  log p(model = 1 line ) = </span><span class="si">%.1f%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a_lnZ</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="k">print</span> <span class="s">&#39;************************&#39;</span>
+<span class="k">print</span> <span class="s">&#39;MAIN RESULT: Evidence Z &#39;</span>
+<span class="k">print</span> <span class="s">&#39;************************&#39;</span>
+<span class="k">print</span> <span class="s">&#39;  log Z for model with 1 line = </span><span class="si">%.1f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a_lnZ</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="k">print</span>
 
 <span class="c"># TODO: implement a model with 2 lines?</span>
 </pre></div>
@@ -150,6 +154,7 @@ which allows you to analyse data with the model of a single gaussian line:</p>
 <li>What is the evidence for this model?</li>
 <li><strong>Extend the model to 2 gaussian lines.</strong></li>
 <li>Are 2 gaussian lines preferred? I.e. is the evidence higher?</li>
+<li>Are 3 gaussian lines preferred?</li>
 <li>Analyse the other datasets. Are the results the same?</li>
 </ol>
 <p>Continue with <a class="reference internal" href="example3.html"><em>Example 3: Gaussian Emission lines - correlations</em></a> ...</p>

@@ -51,22 +51,20 @@
 <h1>On the school computers<a class="headerlink" href="#on-the-school-computers" title="Permalink to this headline">¶</a></h1>
 <ol class="arabic">
 <li><p class="first">Log in, and run the bash shell:</p>
-<div class="highlight-python"><pre>[school08@naf-school01]~% bash
-school08@naf-school01 ~ $</pre>
+<div class="highlight-python"><pre>$ ssh -Y schoolNN@naf-school01.desy.de
+[schoolNN@naf-school01]~% bash
+bash-4.1$</pre>
 </div>
 </li>
 <li><p class="first">Load the environment:</p>
-<div class="highlight-python"><pre>$ . /afs/desy.de/group/school/mc-school/setup_pymultinest.sh</pre>
-</div>
-</li>
-<li><p class="first">Test it:</p>
-<div class="highlight-python"><pre>$ mkdir test
-$ cd test
-$ python /afs/desy.de/group/school/mc-school/multinest-install/PyMultiNest/pymultinest_demo_minimal.py
-$ multinest_marginals.py chains/1-</pre>
+<div class="highlight-python"><pre>bash-4.1$ source /afs/desy.de/group/school/mc-school/setup_pymultinest.sh
+installing pymultinest ... installation successful
+configuring environment and testing ... ok
+schoolNN@naf-school01 ~ $</pre>
 </div>
 </li>
 </ol>
+<p>Go start with Example 1. Do not waste time installing on your own computer before having finished Example 1.</p>
 </div>
 <div class="section" id="on-your-own-computer">
 <h1>On your own computer<a class="headerlink" href="#on-your-own-computer" title="Permalink to this headline">¶</a></h1>

@@ -10,7 +10,8 @@ It should kickstart you to
 * run pymultinest
 * visualize and interpret the results
 
-Make sure you have :doc:`pymultinest installed <install>`. Then, **go get started with** :doc:`Example 1 <example1>`!
+Make sure you have :doc:`pymultinest installed <install>` correctly.
+Then, **go get started with** :doc:`Example 1 <example1>`!
 
 Contents
 ---------------
