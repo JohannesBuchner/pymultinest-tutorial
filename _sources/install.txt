@@ -17,7 +17,10 @@ On the school computers
 	configuring environment and testing ... ok
 	schoolNN@naf-school01 ~ $
 
-Go start with Example 1. Do not waste time installing on your own computer before having finished Example 1.
+Go start with Example 1. 
+
+If you have an up-to-date Linux System (e.g. Ubuntu), you
+may install MultiNest and PyMultiNest locally.
 
 On your own computer
 ----------------------------
